@@ -9,3 +9,4 @@ authelia/configuration.yml
 authelia/private.pem
 authelia/users_database.yml
 entrypoint.sh
+credentials.txt
