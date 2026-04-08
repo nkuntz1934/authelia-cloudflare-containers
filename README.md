@@ -5,12 +5,25 @@ Authelia OIDC identity provider running on Cloudflare Containers with LLDAP as t
 ## Architecture
 
 ```
-User -> Worker (auth.example.com) -> Cloudflare Container -> Authelia (:9091)
-                                                                  |
-                                                                  v
-LLDAP Admin UI (ldap.example.com) <- Cloudflare Tunnel <- DO Droplet
-                                                              |
-Authelia LDAP connection (lldap-direct.example.com:3890) ----+
+                        Cloudflare                                DigitalOcean
+ +---------------------------------------------------------+     +------------------+
+ |                                                         |     |                  |
+ |   auth.example.com                                     |     |   LLDAP          |
+ |   +--------+     +-----------+     +----------+        |     |   :3890 (LDAP)   |
+ |   | Worker |---->| Container |---->| Authelia  |---LDAP-+---->|   :17170 (HTTP)  |
+ |   +--------+     +-----------+     | :9091     |        |     |                  |
+ |                                    +----------+        |     +--------+---------+
+ |                                                         |              |
+ |   ldap.example.com                                     |              |
+ |   +-------------------+     +-------------------+       |              |
+ |   | Cloudflare Proxy  |---->| Tunnel (cloudflared) |----+--------------+
+ |   +-------------------+     +-------------------+       |
+ |                                                         |
+ +---------------------------------------------------------+
+
+ LDAP:       lldap-direct.example.com:3890 (non-proxied A record, FW to CF IPs)
+ Admin UI:   ldap.example.com (proxied CNAME -> tunnel)
+ Auth:       auth.example.com (proxied AAAA -> Worker route)
 ```
 
 - **Authelia** runs in a Cloudflare Container (Durable Object) behind a Worker.
