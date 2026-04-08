@@ -1,0 +1,80 @@
+---
+theme: dark
+
+server:
+  address: 'tcp://0.0.0.0:9091'
+
+log:
+  level: debug
+
+totp:
+  issuer: auth.example.com
+
+authentication_backend:
+  ldap:
+    address: 'ldap://lldap-direct.example.com:3890'
+    implementation: custom
+    timeout: 5s
+    start_tls: false
+    base_dn: 'dc=example,dc=org'
+    additional_users_dn: 'ou=people'
+    users_filter: '(&({username_attribute}={input})(objectClass=person))'
+    additional_groups_dn: 'ou=groups'
+    groups_filter: '(member={dn})'
+    user: 'uid=admin,ou=people,dc=example,dc=org'
+    password: 'CHANGE_ME_LDAP_ADMIN_PASSWORD'
+    attributes:
+      username: 'uid'
+      display_name: 'displayName'
+      mail: 'mail'
+      group_name: 'cn'
+
+access_control:
+  default_policy: one_factor
+
+identity_validation:
+  reset_password:
+    jwt_secret: 'CHANGE_ME_JWT_SECRET'
+
+session:
+  secret: 'CHANGE_ME_SESSION_SECRET'
+  cookies:
+    - domain: 'example.com'
+      authelia_url: 'https://auth.example.com'
+
+storage:
+  encryption_key: 'CHANGE_ME_STORAGE_ENCRYPTION_KEY'
+  local:
+    path: /data/db.sqlite3
+
+notifier:
+  filesystem:
+    filename: /data/notification.txt
+
+identity_providers:
+  oidc:
+    hmac_secret: 'CHANGE_ME_HMAC_SECRET'
+    jwks:
+      - key: |
+          -----BEGIN PRIVATE KEY-----
+          PASTE_YOUR_RSA_PRIVATE_KEY_HERE
+          -----END PRIVATE KEY-----
+    clients:
+      - client_id: 'cloudflare'
+        client_name: 'Cloudflare Access'
+        client_secret: 'CHANGE_ME_BCRYPT_HASHED_CLIENT_SECRET'
+        public: false
+        authorization_policy: one_factor
+        consent_mode: implicit
+        redirect_uris:
+          - 'https://YOUR_TEAM.cloudflareaccess.com/cdn-cgi/access/callback'
+        scopes:
+          - openid
+          - email
+          - profile
+          - groups
+        response_types:
+          - code
+        grant_types:
+          - authorization_code
+        token_endpoint_auth_method: client_secret_basic

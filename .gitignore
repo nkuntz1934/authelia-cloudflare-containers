@@ -1,0 +1,11 @@
+node_modules/
+.wrangler/
+dist/
+*.log
+.env
+
+# Secrets - use .example files as templates
+authelia/configuration.yml
+authelia/private.pem
+authelia/users_database.yml
+entrypoint.sh

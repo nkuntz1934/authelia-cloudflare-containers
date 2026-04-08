@@ -1,0 +1,38 @@
+{
+  "name": "authelia-oidc",
+  "account_id": "YOUR_ACCOUNT_ID",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-01-10",
+  "containers": [
+    {
+      "class_name": "AutheliaContainer",
+      "image": "./Dockerfile",
+      "instance_type": "basic",
+      "max_instances": 1
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "AUTHELIA",
+        "class_name": "AutheliaContainer"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["AutheliaContainer"]
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "routes": [
+    {
+      "pattern": "auth.example.com/*",
+      "zone_name": "example.com"
+    }
+  ]
+}
