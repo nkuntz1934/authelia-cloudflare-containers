@@ -8,13 +8,13 @@ Authelia OIDC identity provider running on Cloudflare Containers with LLDAP as t
                         Cloudflare                                DigitalOcean
  +---------------------------------------------------------+     +------------------+
  |                                                         |     |                  |
- |   auth.example.com                                     |     |   LLDAP          |
+ |   auth.example.com                                      |     |   LLDAP          |
  |   +--------+     +-----------+     +----------+         |     |   :3890 (LDAP)   |
  |   | Worker |---->| Container |---->| Authelia  |---LDAP-+---->|   :17170 (HTTP)  |
  |   +--------+     +-----------+     | :9091     |        |     |                  |
  |                                    +----------+         |     +--------+---------+
  |                                                         |              |
- |   ldap.example.com                                     |              |
+ |   ldap.example.com                                      |              |
  |   +-------------------+     +-------------------+       |              |
  |   | Cloudflare Proxy  |---->| Tunnel (cloudflared) |----+--------------+
  |   +-------------------+     +-------------------+       |
