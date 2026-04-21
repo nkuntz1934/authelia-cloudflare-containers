@@ -10,6 +10,14 @@ log:
 totp:
   issuer: auth.example.com
 
+webauthn:
+  disable: false
+  display_name: 'Example'
+  enable_passkey_login: true
+  selection_criteria:
+    discoverability: 'required'
+    user_verification: 'required'
+
 authentication_backend:
   ldap:
     address: 'ldap://lldap-direct.example.com:3890'
@@ -30,7 +38,7 @@ authentication_backend:
       group_name: 'cn'
 
 access_control:
-  default_policy: one_factor
+  default_policy: two_factor
 
 identity_validation:
   reset_password:
@@ -64,7 +72,7 @@ identity_providers:
         client_name: 'Cloudflare Access'
         client_secret: 'CHANGE_ME_BCRYPT_HASHED_CLIENT_SECRET'
         public: false
-        authorization_policy: one_factor
+        authorization_policy: two_factor
         consent_mode: implicit
         redirect_uris:
           - 'https://YOUR_TEAM.cloudflareaccess.com/cdn-cgi/access/callback'

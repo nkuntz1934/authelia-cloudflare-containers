@@ -1,0 +1,61 @@
+{
+  "name": "authelia-oidc",
+  "account_id": "YOUR_ACCOUNT_ID",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-01-10",
+  "workers_dev": true,
+  "vars": {
+    // workers.dev URL (revealed by first deploy). Container uses this to
+    // self-call back into the Worker for /_snap and /_send — bypasses the
+    // zone's bot-management rules that reject scripted requests to the custom
+    // domain.
+    "SNAPSHOT_URL": "https://authelia-oidc.<your-subdomain>.workers.dev",
+    // Sender address for Authelia notifications. Must be on a domain
+    // verified in Cloudflare Email Sending.
+    "MAIL_FROM": "auth@example.com"
+  },
+  "send_email": [
+    { "name": "SEND_EMAIL" }
+  ],
+  "containers": [
+    {
+      "class_name": "AutheliaContainer",
+      "image": "./Dockerfile",
+      "instance_type": "basic",
+      "max_instances": 1,
+      "wrangler_ssh": {
+        "enabled": true
+      },
+      "authorized_keys": [
+        {
+          "name": "your-debug-key",
+          "public_key": "ssh-ed25519 AAAA... your-comment"
+        }
+      ]
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      { "name": "AUTHELIA", "class_name": "AutheliaContainer" }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["AutheliaContainer"]
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "r2_buckets": [
+    { "binding": "AUTHELIA_DB", "bucket_name": "authelia-db" }
+  ],
+  "routes": [
+    {
+      "pattern": "auth.example.com",
+      "custom_domain": true
+    }
+  ]
+}
