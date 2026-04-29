@@ -12,3 +12,4 @@ authelia/users_database.yml
 entrypoint.sh
 credentials.txt
 .DS_Store
+AGENTS.md

@@ -69,7 +69,7 @@ python3 -c "import bcrypt; print(bcrypt.hashpw(b'YOUR_CLIENT_SECRET', bcrypt.gen
 
 ### 2. Configure Authelia
 
-Copy `authelia/configuration.yml.example` to `authelia/configuration.easydemo.yml` (or any environment name — the file is gitignored) and fill in:
+Copy `authelia/configuration.yml.example` to `authelia/configuration.yml` (gitignored) and fill in:
 - All `CHANGE_ME_*` placeholder values
 - RSA private key in the `jwks` block
 - LDAP bind password

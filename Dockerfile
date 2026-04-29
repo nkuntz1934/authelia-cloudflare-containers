@@ -5,7 +5,7 @@ FROM authelia/authelia:latest
 
 RUN mkdir -p /data
 
-COPY authelia/configuration.easydemo.yml /config/configuration.yml
+COPY authelia/configuration.yml /config/configuration.yml
 COPY container-entrypoint.sh /entrypoint.sh
 COPY notif-forwarder.sh /usr/local/bin/notif-forwarder.sh
 RUN chmod +x /entrypoint.sh /usr/local/bin/notif-forwarder.sh
