@@ -22,6 +22,11 @@ interface Env {
   SEND_EMAIL: SendEmailBinding;
   // From-address used when forwarding Authelia notifications.
   MAIL_FROM: string;
+  // Cloudflare Tunnel hostname for the LLDAP service.
+  TUNNEL_HOSTNAME: string;
+  // Access service-token credentials for the LLDAP tunnel.
+  CF_ACCESS_CLIENT_ID: string;
+  CF_ACCESS_CLIENT_SECRET: string;
 }
 
 const SNAPSHOT_KEY = "db.sqlite3";
@@ -40,6 +45,9 @@ export class AutheliaContainer extends Container<Env> {
       // Set per-environment via `vars.SNAPSHOT_URL` in wrangler.jsonc.
       WORKER_URL: env.SNAPSHOT_URL,
       SNAPSHOT_TOKEN: env.SNAPSHOT_TOKEN,
+      TUNNEL_HOSTNAME: env.TUNNEL_HOSTNAME,
+      CF_ACCESS_CLIENT_ID: env.CF_ACCESS_CLIENT_ID,
+      CF_ACCESS_CLIENT_SECRET: env.CF_ACCESS_CLIENT_SECRET,
     };
   }
 }
